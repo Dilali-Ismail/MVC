@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: PostgresMVC
+    restart: always
+    environment:
+      POSTGRES_DB: MVCdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: PgAdminMvc
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mvc.com
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+    ports:
+      - "8088:80"
+
+  php:
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile
+    container_name: phpMVC
+    restart: always
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "85:80"
+
+volumes:
+  postgres_data:
